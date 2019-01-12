@@ -2,9 +2,16 @@ import glob
 import os
 import sys
 from argparse import ArgumentParser
+from io import StringIO
 from typing import Union, List, Iterator, Callable, Optional, Tuple
+from xml.etree.ElementTree import ElementTree
 
 import requests
+from jsonasobj import loads
+from rdflib import Graph, Namespace, RDF
+
+FHIR = Namespace("http://hl7.org/fhir/")
+FHIR_XML_URI = str(FHIR)[:-1]
 
 
 def filename_iter(path: str, *, suffix: str = '', recursive: bool = False) -> Iterator[str]:
@@ -76,7 +83,34 @@ def file_iter(path: str, *, suffix: str = '', recursive: bool = False,
             yield fname, txt
 
 
-def create(server: str, files: List[str], format: str, recursive: bool) -> List[Tuple[str, bool]]:
+def resource_url(server: str, text: str) -> str:
+    def as_url(resource_name, resource_format) -> str:
+        return f"{server}{'/' if not server.endswith('/') else ''}{resource_name}" \
+               f"?_format={resource_format}&_pretty=true"
+
+    """ Create a server URL for uploading text """
+    if text.startswith('<'):
+        # XML
+        doc = ElementTree().parse(source=StringIO(text))
+        '{http://hl7.org/fhir}ClinicalProfile'
+        typ = doc.tag.replace(f'{{{FHIR_XML_URI}}}', '')
+        return as_url(typ, 'xml')
+    elif text.startswith('{'):
+        # JSON
+        json_text = loads(text)
+        return as_url(json_text.resourceType, 'json')
+    elif text.startswith('@'):
+        g = Graph()
+        g.parse(data=text, format='turtle')
+        focus = g.value(predicate=FHIR.nodeRole, object=FHIR.treeRoot)
+        typ_uri = g.value(subject=focus, predicate=RDF.type)
+        typ = str(typ_uri).replace(str(FHIR), '')
+        return as_url(typ, 'ttl')
+    else:
+        raise ValueError("Unrecognized file type")
+
+
+def create(server: str, files: List[str], format: str, recursive: bool, verbose: bool = False) -> List[Tuple[str, bool]]:
     """
     Upload files to server
 
@@ -84,12 +118,18 @@ def create(server: str, files: List[str], format: str, recursive: bool) -> List[
     :param files: File specification(s)
     :param format: file format if specification(s) name directories
     :param recursive: recurse in directories if specification(s) name directories
+    :param verbose: True means speak to me
     :return: List of filename/success indicators
     """
     rval = []
-    for filename in files:
-        for _, text in file_iter(filename, suffix=format, recursive=recursive):
-            response = requests.post(server, data=text)
+    for filepath in files:
+        for filename, text in file_iter(filepath, suffix=format, recursive=recursive):
+            server_url = resource_url(server, text)
+            if verbose:
+                print(f"POST {filename} to {server_url}... ", end='')
+            response = requests.post(server_url, data=text)
+            if verbose:
+                print(f"{'OK' if response.status_code == 200 else response.reason}")
             rval.append((filename, response.status_code))
     return rval
 
@@ -108,6 +148,7 @@ def genargs() -> ArgumentParser:
                         choices=['json', 'xml', 'ttl'])
     parser.add_argument("-r", "--recursive", action="store_true",
                         help="True means recursively descend directory.  Only applicable if file is a directory")
+    parser.add_argument("-v", "--verbose", action="store_true", help="Talk while working")
     return parser
 
 
@@ -119,7 +160,7 @@ def fhir_loader(args: Union[str, List[str]]) -> int:
     :return: 0 if success 1 if one or more uploads failed
     """
     opts = genargs().parse_args(args)
-    rslts = create(opts.server, opts.files, opts.format, opts.recursive)
+    rslts = create(opts.server, opts.files, opts.format, opts.recursive, opts.verbose)
     for rslt in rslts:
         if rslt[1] != 200:
             print(f"{rslt[0]} failure: {rslt[1]}", file=sys.stderr)
