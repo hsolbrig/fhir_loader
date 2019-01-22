@@ -2,4 +2,5 @@
 setup.py
 fhir_loader/__init__.py
 fhir_loader/fhir_loader.py
+fhir_loader/fhir_reader.py
 scripts/fhir_loader

@@ -9,7 +9,6 @@ verify_ssl = true
 requests = "*"
 jsonasobj = "*"
 rdflib = "*"
-lxml = "*"
 
 [requires]
 python_version = "3.7"

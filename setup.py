@@ -10,7 +10,7 @@ setup(
     author_email='solbrig@jhu.edu',
     description='FHIR loading tool',
     long_description='Utility for uploading files, directories and other content into FHIR',
-    install_requires=["requests"],
+    install_requires=["requests", "jsonasobj", "rdflib"],
     scripts=['scripts/fhir_loader'],
     classifiers=[
         'Development Status :: 4 - Beta',
