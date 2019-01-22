@@ -92,8 +92,10 @@ def file_iter(path: str, *, suffix: str = '', recursive: bool = False, pattern: 
 def resource_url(server: str, text: str) -> str:
     """ Create a URL out of the resource text """
     def as_url(resource_name:str, resource_format:str, resource_id:str) -> str:
+        # Note that the 'json' below defines the response format.  The server is clever enough to figure out
+        # what you are shipping...
         return f"{server}{'/' if not server.endswith('/') else ''}{resource_name}" \
-               f"/{resource_id}?_format={resource_format}&_pretty=true"
+               f"/{resource_id}?_format=json&_pretty=true"
 
     """ Create a server URL for uploading text """
     if text.startswith('<'):
