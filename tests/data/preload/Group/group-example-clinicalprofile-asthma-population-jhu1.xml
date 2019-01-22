@@ -1,0 +1,34 @@
+<Group xmlns="http://hl7.org/fhir">
+    <id value="asthma-population-jhu1"/>
+    <text>
+        <status value="additional"/>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>Patients having a diagnosis of asthma recorded on the problem list or as an encounter diagnosis.</p>
+            <p>All patients seen as either outpatients or inpatients at Johns Hopkins Hospital, JHCP, and Bayview
+                between 3/1/2016 and 3/1/2018 having a diagnosis of asthma recorded on the problem list or as an
+                encounter diagnosis.
+            </p>
+        </div>
+    </text>
+    <identifier>
+        <system value="http://ictrweb.johnshopkins.edu/ictr/synthetic/includes/"/>
+        <value value="something"/>
+    </identifier>
+    <type value="person"/>
+    <actual value="true"/>
+    <name value="All patients seen as either outpatients or inpatients at Johns Hopkins Hospital, JHCP, and Bayview between 3/1/2016 and 3/1/2018 having a diagnosis of asthma recorded on the problem list or as an encounter diagnosis."/>
+    <quantity value="60674"/>
+    <characteristic>
+        <code>
+            <text value="encounter diagnosis"/>
+        </code>
+        <valueCodeableConcept>
+            <text value="asthma"/>
+        </valueCodeableConcept>
+        <exclude value="false"/>
+        <period>
+            <start value="2016-03-01"/>
+            <end value="2017-03-01"/>
+        </period>
+    </characteristic>
+</Group>

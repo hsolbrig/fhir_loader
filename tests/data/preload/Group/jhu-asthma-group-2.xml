@@ -1,0 +1,31 @@
+<?xml version="1.0" ?><Group xmlns="http://hl7.org/fhir">
+	<id value="asthma-sample-2-cohort-jhu1"/>
+	<text>        
+		<status value="additional"/>
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			<p>asthma patients aged 0-4, White or Caucasian,Native Hawaiian or Other Pacific Islander,Black or African American,Asian,Unknown,Hispanic,Declined to Answer,American Indian or Alaska Native,Other, Male,Female</p>
+		</div>
+	</text>
+	<identifier>
+		<system value="http://ncats.org/clinicalprofile/"/>
+		<value value="sample-2"/>
+	</identifier>
+	<type value="person"/>
+	<actual value="true"/>
+	<name value="asthma patients aged 0-4, White or Caucasian,Native Hawaiian or Other Pacific Islander,Black or African American,Asian,Unknown,Hispanic,Declined to Answer,American Indian or Alaska Native,Other, Male,Female"/>
+	<quantity value="4406"/>
+	<characteristic>
+		<code>
+			<text value="ageGroup"/>
+		</code>
+		<valueRange>
+			<low>
+				<value value="0"/>
+			</low>
+			<high>
+				<value value="4"/>
+			</high>
+		</valueRange>
+		<exclude value="false"/>
+	</characteristic>
+</Group>

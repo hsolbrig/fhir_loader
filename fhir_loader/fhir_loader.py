@@ -187,7 +187,7 @@ def fhir_loader(args: Union[str, List[str]]) -> int:
     opts = genargs().parse_args(args)
     rslts = create(opts.server, opts.files, opts.format, opts.recursive, opts.verbose, opts.pattern)
     for rslt in rslts:
-        if rslt[1] != 200:
-            print(f"{rslt[0]} failure: {rslt[2]}", file=sys.stderr)
-    return int(bool(any(r[1] != 200 for r in rslts)))
+        if rslt[1] not in (200, 201):
+            print(f"{rslt[0]} failure: ({rslt[1]}) {rslt[2]}", file=sys.stderr)
+    return int(bool(any(r[1] not in  (200, 201) for r in rslts)))
 

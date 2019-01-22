@@ -44,7 +44,7 @@ optional arguments:
     def test_load_formats(self):
         """ Make sure all possible formats work """
         asthma_elements = os.path.join(datadir, 'urltestdir', 'jhu-asthma-lab-33')
-        self.assertEqual(0, fhir_loader([server, asthma_elements + ".xml"]))
+        self.assertEqual(0, fhir_loader(["-v", server, asthma_elements + ".xml"]))
         self.assertEqual(0, fhir_loader([server, asthma_elements + ".json"]))
 
     def test_large_upload(self):

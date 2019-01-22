@@ -1,0 +1,24 @@
+<Group xmlns="http://hl7.org/fhir">
+    <id value="asthma-population"/>
+    <text>
+        <status value="additional"/>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>Patients having a diagnosis of asthma recorded on the problem list or as an encounter diagnosis.</p>
+            <p>This is an abstract profile that can be applied to different base populations</p>
+        </div>
+    </text>
+    <identifier>
+        <system value="http://ncats.org/clinicalprofile/"/>
+        <value value="asthma"/>
+    </identifier>
+ <type value="person"/>
+ <actual value="false"/>
+ <name value="Patients diagnosed with asthma"/>
+ <characteristic>
+  <code><text value="encounter diagnosis"/></code>
+  <valueCodeableConcept>
+      <text value="asthma"/>
+  </valueCodeableConcept>
+         <exclude value="false"/>
+ </characteristic>
+</Group>
